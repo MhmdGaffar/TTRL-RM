@@ -108,6 +108,7 @@ def _normalize(expr: str) -> str:
         return None
 
     # Remove enclosing `\text{}`.
+    expr = str(expr)
     m = re.search("^\\\\text\{(?P<text>.+?)\}$", expr)
     if m is not None:
         expr = m.group("text")
