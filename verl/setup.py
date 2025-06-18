@@ -41,6 +41,8 @@ install_requires = [
     "torchdata",
     "transformers",
     "wandb",
+    "latex2sympy2",
+    "word2number",
 ]
 
 TEST_REQUIRES = ["pytest", "pre-commit", "py-spy"]
