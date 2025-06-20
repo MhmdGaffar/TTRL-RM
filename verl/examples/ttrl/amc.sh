@@ -28,8 +28,8 @@ N_SAMPLES_PER_PROMPT=32
 MINI_BATCH_SIZE=1 # Actual mini batch size is MINI_BATCH_SIZE * N_SAMPLES_PER_PROMPT
 MICRO_BATCH_SIZE=2
 
-DATA_LOCAL_DIR="/fs-computility/prime/shengli/dev/verl/data"
-BACKBONE_PATH="/fs-computility/prime/shared/llms/Qwen/${BACKBONE}"
+DATA_LOCAL_DIR="data"
+BACKBONE_PATH="Qwen/${BACKBONE}"
 
 MODEL="${TASK}-${BACKBONE}"
 EXPERIMENT="TTRL-Len@${K}k"
