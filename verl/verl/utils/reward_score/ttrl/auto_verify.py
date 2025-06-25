@@ -8,7 +8,7 @@ from verl.utils.reward_score.ttrl.qwen.qwen_eval import (qwen_reward_fn,
                                                          simplerl_reward_fn)
 
 
-def auto_verify(task, all_outputs, all_labels, extra_info=None):
+def auto_verify(task, all_outputs, all_labels, extra_info=None, extended_info=None):
 
     task2verify = {
         "math": qwen_reward_fn,
@@ -19,8 +19,10 @@ def auto_verify(task, all_outputs, all_labels, extra_info=None):
     verify_fn = task2verify[task]
     verify_extra_info = defaultdict(list)
 
-    rewards = [verify_fn(output, label)
-                   for output, label in zip(all_outputs, all_labels)]
+    if extra_info is not None:
+        rewards = [verify_fn(output, label, extended) for output, label, extended in zip(all_outputs, all_labels, extended_info)]
+    else:
+        rewards = [verify_fn(output, label) for output, label in zip(all_outputs, all_labels)]
     
     verify_extra_info["acc"] = rewards
 

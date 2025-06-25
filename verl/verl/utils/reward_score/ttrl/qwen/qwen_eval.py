@@ -155,6 +155,16 @@ def simplerl_reward_fn(generated_text, golden_answer):
         accuracy = -1.0
     return accuracy
 
-# define the custom reward function for the TTRL task
-# then add it to TTRL-RM\verl\verl\utils\reward_score\ttrl\auto_verify.py in the auto_verify function
-# then add it to TTRL-RM\verl\verl\utils\reward_score\ttrl\ttt_metrics.py in the test_time_train_metrics function
+def qwen_reward_fn(generated_text, golden_answer, task="math", extended_info=None):
+    model_answer = extract_answer(generated_text, task)
+    accuracy = 1.0 if grade_answer(model_answer, golden_answer) else 0.0 #-0.5
+    if "boxed" not in generated_text:
+        accuracy = -1.0
+
+    if extended_info is not None:
+        if "prompt_length" in extended_info and "response_length" in extended_info:
+            response_prompt_length_ratio = extended_info["response_length"] / extended_info["prompt_length"] / 5 - 1
+            response_prompt_length_ratio = max(0, response_prompt_length_ratio)
+            accuracy -= response_prompt_length_ratio
+    
+    return accuracy

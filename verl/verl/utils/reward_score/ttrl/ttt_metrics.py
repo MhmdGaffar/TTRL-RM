@@ -8,7 +8,7 @@ from verl.utils.reward_score.ttrl.auto_verify import auto_verify
 def test_time_train_metrics(
     solutions: List[str],
     ground_truth: List[str],
-    task="math", extra_info=None):
+    task="math", extra_info=None, extended_info=None):
     
     assert len(solutions) == len(ground_truth), f"{len(solutions)} vs {len(ground_truth)}"
 
@@ -24,16 +24,9 @@ def test_time_train_metrics(
     majority_ratio = majority_count / len(solutions)
     # true_label_ratio = counter.get(ground_truth, 0) / len(solutions)
 
-    print("############################")
-    print(f"Estimated label: {estimated_label}")
-    print(f"Majority count: {majority_count}")
-    print(f"taks: {task}")
-    print("############################")
-    rewards, _ = auto_verify(task, solutions, [estimated_label] * len(solutions), extra_info=extra_info)
+    rewards, _ = auto_verify(task, solutions, [estimated_label] * len(solutions), extra_info=extra_info, extended_info=extended_info)
+    extra_rewards, _ = auto_verify(task, solutions, solutions, extra_info=extra_info, extended_info=extended_info)
     true_rewards, _ = auto_verify(task, solutions, [ground_truth] * len(solutions), extra_info=extra_info)
-    print(f"Estimated rewards: {rewards}")
-    print(f"True rewards: {true_rewards}")
-    print("############################")
     
     rewards_hit_rate = 0
     for reward, true_reward in zip(rewards, true_rewards):
@@ -49,6 +42,7 @@ def test_time_train_metrics(
         "majority_ratio": majority_ratio,
         "ground_truth_ratio": sum(true_rewards) / len(true_rewards),
         "majority_voting_reward": sum(rewards) / len(rewards),
+        "extra_rewards": (sum(extra_rewards) - len(extra_rewards)) / len(extra_rewards),
         f"pass@{len(solutions)}": 1.0 if sum(true_rewards) >= 1 else 0.0,
     }
     return rewards, ttrl_metrics

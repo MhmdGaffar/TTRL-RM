@@ -122,6 +122,7 @@ class TTRLRewardManager:
                 group_pred_outputs = []
                 group_labels = []
                 group_extra_info = []
+                extended_info = []
                 task = None
 
                 for i in range(self.n_votes_per_prompt):
@@ -148,8 +149,9 @@ class TTRLRewardManager:
                     group_labels.append(ground_truth)
                     group_pred_outputs.append(response_str)
                     group_extra_info.append(extra_info)
+                    extended_info.append({"prompt_length": valid_prompt_length, "response_length": valid_response_length})
                 
-                rewards, ttrl_metrics = test_time_train_metrics(group_pred_outputs, group_labels, task=task, extra_info=group_extra_info)
+                rewards, ttrl_metrics = test_time_train_metrics(group_pred_outputs, group_labels, task=task, extra_info=group_extra_info, extended_info=extended_info)
 
                 for k, v in ttrl_metrics.items():
                     all_ttrl_metrics[k].append(v)
