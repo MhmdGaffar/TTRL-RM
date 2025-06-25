@@ -19,7 +19,7 @@ def auto_verify(task, all_outputs, all_labels, extra_info=None, extended_info=No
     verify_fn = task2verify[task]
     verify_extra_info = defaultdict(list)
 
-    if extra_info is not None:
+    if extended_info is not None:
         rewards = [verify_fn(output, label, extended) for output, label, extended in zip(all_outputs, all_labels, extended_info)]
     else:
         rewards = [verify_fn(output, label) for output, label in zip(all_outputs, all_labels)]
