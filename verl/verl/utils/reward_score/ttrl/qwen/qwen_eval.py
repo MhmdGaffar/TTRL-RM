@@ -154,3 +154,7 @@ def simplerl_reward_fn(generated_text, golden_answer):
     if "boxed" not in generated_text:
         accuracy = -1.0
     return accuracy
+
+# define the custom reward function for the TTRL task
+# then add it to TTRL-RM\verl\verl\utils\reward_score\ttrl\auto_verify.py in the auto_verify function
+# then add it to TTRL-RM\verl\verl\utils\reward_score\ttrl\ttt_metrics.py in the test_time_train_metrics function

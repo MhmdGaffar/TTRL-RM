@@ -24,8 +24,16 @@ def test_time_train_metrics(
     majority_ratio = majority_count / len(solutions)
     # true_label_ratio = counter.get(ground_truth, 0) / len(solutions)
 
+    print("############################")
+    print(f"Estimated label: {estimated_label}")
+    print(f"Majority count: {majority_count}")
+    print(f"taks: {task}")
+    print("############################")
     rewards, _ = auto_verify(task, solutions, [estimated_label] * len(solutions), extra_info=extra_info)
     true_rewards, _ = auto_verify(task, solutions, [ground_truth] * len(solutions), extra_info=extra_info)
+    print(f"Estimated rewards: {rewards}")
+    print(f"True rewards: {true_rewards}")
+    print("############################")
     
     rewards_hit_rate = 0
     for reward, true_reward in zip(rewards, true_rewards):
