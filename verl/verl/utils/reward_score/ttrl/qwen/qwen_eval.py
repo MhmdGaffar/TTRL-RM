@@ -155,25 +155,17 @@ def simplerl_reward_fn(generated_text, golden_answer):
         accuracy = -1.0
     return accuracy
 
-def qwen_reward_fn(generated_text, golden_answer, task="math", extended_info=None):
+def qwen_reward_fn(generated_text, golden_answer, extended_info=None, task="math"):
     model_answer = extract_answer(generated_text, task)
     accuracy = 1.0 if grade_answer(model_answer, golden_answer) else 0.0 #-0.5
 
-
-    # print("##################")
-    # print("Extended Info: ", extended_info)
     if extended_info is not None:
-        # print("Boxed in generated text: ", "boxed" in generated_text)
         if "boxed" not in generated_text:
             accuracy -= 1.0
 
-        # print("prompt_length in extended_info and response_length in extended_info")
-        # print("prompt_length" in extended_info and "response_length" in extended_info)
         if "prompt_length" in extended_info and "response_length" in extended_info:
-            # print(extended_info["response_length"] / extended_info["prompt_length"])
             response_prompt_length_ratio = extended_info["response_length"] / extended_info["prompt_length"] / 5 - 1
             response_prompt_length_ratio = max(0, response_prompt_length_ratio)
             accuracy -= response_prompt_length_ratio
-    # print("##################")
     
     return accuracy
