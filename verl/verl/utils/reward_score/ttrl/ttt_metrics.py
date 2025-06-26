@@ -26,9 +26,12 @@ def test_time_train_metrics(
 
     majority_rewards, _ = auto_verify(task, solutions, [estimated_label] * len(solutions), extra_info=extra_info)
     rewards, _ = auto_verify(task, solutions, [estimated_label] * len(solutions), extra_info=extra_info, extended_info=extended_info)
-    extra_rewards, _ = auto_verify(task, solutions, solutions, extra_info=extra_info, extended_info=extended_info)
     true_rewards, _ = auto_verify(task, solutions, [ground_truth] * len(solutions), extra_info=extra_info)
-    
+
+    reward_avg = sum(rewards) / len(rewards)
+    majority_reward_avg = sum(majority_rewards) / len(majority_rewards)
+    extra_reward_avg = reward_avg - majority_reward_avg
+
     rewards_hit_rate = 0
     for reward, true_reward in zip(majority_rewards, true_rewards):
         if reward == true_reward:
@@ -42,9 +45,9 @@ def test_time_train_metrics(
         "reward_accuracy": rewards_hit_rate,
         "majority_ratio": majority_ratio,
         "ground_truth_ratio": sum(true_rewards) / len(true_rewards),
-        "reward": sum(rewards) / len(rewards),
-        "majority_voting_reward": sum(majority_rewards) / len(majority_rewards),    
-        "extra_rewards": (sum(extra_rewards) / len(extra_rewards)) - 1,
+        "reward": reward_avg,
+        "majority_voting_reward": majority_reward_avg,
+        "extra_rewards": extra_reward_avg,
         f"pass@{len(solutions)}": 1.0 if sum(true_rewards) >= 1 else 0.0,
     }
     return rewards, ttrl_metrics
