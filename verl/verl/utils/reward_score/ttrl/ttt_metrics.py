@@ -42,8 +42,9 @@ def test_time_train_metrics(
         "reward_accuracy": rewards_hit_rate,
         "majority_ratio": majority_ratio,
         "ground_truth_ratio": sum(true_rewards) / len(true_rewards),
-        "majority_voting_reward": sum(rewards) / len(rewards),
-        "extra_rewards": (sum(extra_rewards)) / len(extra_rewards) - 1,
+        "reward": sum(rewards) / len(rewards),
+        "majority_voting_reward": sum(majority_rewards) / len(majority_rewards),    
+        "extra_rewards": (sum(extra_rewards) / len(extra_rewards)) - 1,
         f"pass@{len(solutions)}": 1.0 if sum(true_rewards) >= 1 else 0.0,
     }
     return rewards, ttrl_metrics
