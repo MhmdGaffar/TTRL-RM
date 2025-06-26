@@ -24,12 +24,13 @@ def test_time_train_metrics(
     majority_ratio = majority_count / len(solutions)
     # true_label_ratio = counter.get(ground_truth, 0) / len(solutions)
 
+    majority_rewards, _ = auto_verify(task, solutions, [estimated_label] * len(solutions), extra_info=extra_info)
     rewards, _ = auto_verify(task, solutions, [estimated_label] * len(solutions), extra_info=extra_info, extended_info=extended_info)
     extra_rewards, _ = auto_verify(task, solutions, solutions, extra_info=extra_info, extended_info=extended_info)
     true_rewards, _ = auto_verify(task, solutions, [ground_truth] * len(solutions), extra_info=extra_info)
     
     rewards_hit_rate = 0
-    for reward, true_reward in zip(rewards, true_rewards):
+    for reward, true_reward in zip(majority_rewards, true_rewards):
         if reward == true_reward:
             rewards_hit_rate += 1
     rewards_hit_rate = rewards_hit_rate / len(rewards)
