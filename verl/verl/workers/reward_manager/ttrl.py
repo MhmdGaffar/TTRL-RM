@@ -62,7 +62,6 @@ class TTRLRewardManager:
                 group_pred_outputs = []
                 group_labels = []
                 group_extra_info = []
-                extended_info = []
                 task = None
 
                 for i in range(self.n_samples_per_prompt):
@@ -90,9 +89,8 @@ class TTRLRewardManager:
                     group_pred_outputs.append(response_str)
                     group_vote_rewards.append(vote_reward)
                     group_extra_info.append(extra_info)
-                    extended_info.append({"prompt_length": valid_prompt_length, "response_length": valid_response_length})
 
-                post_ttrl_metrics = post_test_time_train_metrics(group_pred_outputs, group_labels, group_vote_rewards, task=task, extra_info=group_extra_info, extended_info=extended_info)
+                post_ttrl_metrics = post_test_time_train_metrics(group_pred_outputs, group_labels, group_vote_rewards, task=task, extra_info=group_extra_info)
                 for k, v in post_ttrl_metrics.items():
                     post_ttrl_metrics_list[k].append(v)
 
@@ -190,7 +188,6 @@ class TTRLRewardManager:
             group_pred_outputs = []
             group_labels = []
             group_extra_info = []
-            extended_info = []
             already_print_data_sources = {}
             task = None
             for i in range(len(data)):
@@ -225,10 +222,8 @@ class TTRLRewardManager:
                 else:
                     if task != self._data_source_to_task(data_source):
                         raise NotImplementedError(f"Non consistent task {task} and {self._data_source_to_task(data_source)} for TTRLRewardManager")
-                
-                extended_info.append({"prompt_length": valid_prompt_length, "response_length": valid_response_length})
 
-            rewards, verify_extra_info = auto_verify(task, group_pred_outputs, group_labels, extra_info=group_extra_info, extended_info=extended_info)
+            rewards, verify_extra_info = auto_verify(task, group_pred_outputs, group_labels, extra_info=group_extra_info)
 
             for k, v in verify_extra_info.items():
                 if isinstance(v, list):
