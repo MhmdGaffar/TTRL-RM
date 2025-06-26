@@ -117,6 +117,7 @@ class TTRLRewardManager:
             all_ttrl_metrics = defaultdict(list)
 
             scores = [0.0 for _ in range(len(data))]
+            majority_scores = [0.0 for _ in range(len(data))]
             
             for prompt_i in range(prompt_num):
                 group_pred_outputs = []
@@ -156,8 +157,10 @@ class TTRLRewardManager:
                     group_labels, 
                     task=task, 
                     extra_info=group_extra_info, 
-                    extended_info=extended_info
+                    extended_info=extended_info,
+                    return_majority_rewards=True
                 )
+                majority_rewards = ttrl_metrics.pop("majority_rewards", None)
 
                 for k, v in ttrl_metrics.items():
                     all_ttrl_metrics[k].append(v)
@@ -166,6 +169,7 @@ class TTRLRewardManager:
                     if i < self.n_samples_per_prompt:
                         reward_tensor[prompt_i * self.n_samples_per_prompt + i, valid_response_length - 1] = rewards[i]
                     scores[prompt_i * self.n_votes_per_prompt + i] = rewards[i]
+                    majority_scores[prompt_i * self.n_votes_per_prompt + i] = majority_rewards[i] if majority_rewards is not None else rewards[i]
 
                     if data_source not in already_print_data_sources:
                         already_print_data_sources[data_source] = 0
@@ -176,7 +180,7 @@ class TTRLRewardManager:
                         print("[response]", response_str)
                         print("[score]", rewards[i])
 
-            data.batch["acc"] = torch.tensor(scores, dtype=torch.float32, device=data.batch["prompts"].device)
+            data.batch["acc"] = torch.tensor(majority_scores, dtype=torch.float32, device=data.batch["prompts"].device)
             
             for k, v in all_ttrl_metrics.items():
                 if isinstance(v, list):

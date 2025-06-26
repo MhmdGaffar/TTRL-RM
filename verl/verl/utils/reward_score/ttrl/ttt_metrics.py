@@ -6,9 +6,13 @@ from verl.utils.reward_score.ttrl.auto_verify import auto_verify
 
 
 def test_time_train_metrics(
-    solutions: List[str],
-    ground_truth: List[str],
-    task="math", extra_info=None, extended_info=None):
+        solutions: List[str],
+        ground_truth: List[str],
+        task="math", 
+        extra_info=None, 
+        extended_info=None,
+        return_majority_rewards=False
+    ):
     
     assert len(solutions) == len(ground_truth), f"{len(solutions)} vs {len(ground_truth)}"
 
@@ -50,6 +54,8 @@ def test_time_train_metrics(
         "extra_rewards": extra_reward_avg,
         f"pass@{len(solutions)}": 1.0 if sum(true_rewards) >= 1 else 0.0,
     }
+    if return_majority_rewards:
+        ttrl_metrics["majority_rewards"] = majority_rewards
     return rewards, ttrl_metrics
 
 def post_test_time_train_metrics(
