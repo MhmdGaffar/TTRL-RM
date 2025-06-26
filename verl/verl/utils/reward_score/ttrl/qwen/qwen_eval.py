@@ -161,6 +161,9 @@ def qwen_reward_fn(generated_text, golden_answer, extended_info=None, task="math
 
     if extended_info is not None:
         if "boxed" not in generated_text:
+            accuracy -= 0.25
+
+        if "```python" in generated_text:
             accuracy -= 0.5
 
         if "prompt_length" in extended_info and "response_length" in extended_info:
