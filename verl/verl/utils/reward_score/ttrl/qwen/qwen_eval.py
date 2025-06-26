@@ -161,8 +161,8 @@ def qwen_reward_fn(generated_text, golden_answer, task="math", extended_info=Non
 
     if extended_info is not None:
         if "boxed" not in generated_text:
-            accuracy = -1.0
-            
+            accuracy -= 1.0
+
         if "prompt_length" in extended_info and "response_length" in extended_info:
             response_prompt_length_ratio = extended_info["response_length"] / extended_info["prompt_length"] / 5 - 1
             response_prompt_length_ratio = max(0, response_prompt_length_ratio)
