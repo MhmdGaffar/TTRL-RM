@@ -171,4 +171,6 @@ def qwen_reward_fn(generated_text, golden_answer, extended_info=None, task="math
             response_prompt_length_ratio = max(0, response_prompt_length_ratio)
             accuracy -= response_prompt_length_ratio
     
+    # pass the accuracy as a dictionary and sum it up later
+    # that will also help with minimizing the number of calls to the grading function
     return accuracy
