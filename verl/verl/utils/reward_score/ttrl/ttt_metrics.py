@@ -4,6 +4,35 @@ from typing import List
 from verl.utils.reward_score.ttrl.auto_extract import auto_extract
 from verl.utils.reward_score.ttrl.auto_verify import auto_verify
 
+import zlib
+
+def get_compression_ratio(text, encoding='utf-8', level=6):
+    """
+    Computes the compression ratio (original_size / compressed_size) for a given text.
+    
+    Args:
+        text (str): Input text to compress.
+        encoding (str): Text encoding (default: 'utf-8').
+        level (int): zlib compression level (0-9, default=6).
+    
+    Returns:
+        float: Compression ratio. Returns 0.0 for empty input.
+    """
+    # Encode text to bytes and get original size
+    original_bytes = text.encode(encoding)
+    original_size = len(original_bytes)
+    
+    # Handle empty input
+    if original_size == 0:
+        return 0.0
+    
+    # Compress data and get compressed size
+    compressed_bytes = zlib.compress(original_bytes, level=level)
+    compressed_size = len(compressed_bytes)
+    
+    # Compute compression ratio
+    return original_size / compressed_size
+
 
 def test_time_train_metrics(
         solutions: List[str],
