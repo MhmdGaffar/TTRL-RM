@@ -58,8 +58,12 @@ def test_time_train_metrics(
     # true_label_ratio = counter.get(ground_truth, 0) / len(solutions)
 
     calculated_rewards, _ = auto_verify(task, solutions, [estimated_label] * len(solutions), extra_info=extra_info, extended_info=extended_info)
-    majority_rewards = [i["accuracy"] for i in calculated_rewards]
     rewards = [sum([v for k,v in i.items()]) for i in calculated_rewards]
+    # convert to a dictionary of lists
+    calculated_rewards = {k: [d[k] for d in calculated_rewards] for k in calculated_rewards[0].keys()}
+    majority_rewards = calculated_rewards["accuracy"]
+    # get the avg for calculated_rewards
+    calculated_rewards_avg = {k: sum(v) / len(v) for k, v in calculated_rewards.items()}
     
     true_rewards, _ = auto_verify(task, solutions, [ground_truth] * len(solutions), extra_info=extra_info)
     true_rewards = [i["accuracy"] for i in true_rewards]
@@ -85,6 +89,7 @@ def test_time_train_metrics(
         "majority_voting_reward": majority_reward_avg,
         "extra_rewards": extra_reward_avg,
         f"pass@{len(solutions)}": 1.0 if sum(true_rewards) >= 1 else 0.0,
+        **calculated_rewards_avg,
     }
     if return_majority_rewards:
         ttrl_metrics["majority_rewards"] = majority_rewards
