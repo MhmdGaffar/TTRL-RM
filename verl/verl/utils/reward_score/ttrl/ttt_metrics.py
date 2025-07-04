@@ -53,13 +53,16 @@ def test_time_train_metrics(
     
     estimated_label, majority_count = counter.most_common(1)[0]
     
-    hit_rate = 1.0 if auto_verify(task, [estimated_label], [ground_truth], extra_info=extra_info)[0][0] else 0.0
+    hit_rate = 1.0 if auto_verify(task, [estimated_label], [ground_truth], extra_info=extra_info)[0][0]["accuracy"] else 0.0
     majority_ratio = majority_count / len(solutions)
     # true_label_ratio = counter.get(ground_truth, 0) / len(solutions)
 
-    majority_rewards, _ = auto_verify(task, solutions, [estimated_label] * len(solutions), extra_info=extra_info)
-    rewards, _ = auto_verify(task, solutions, [estimated_label] * len(solutions), extra_info=extra_info, extended_info=extended_info)
+    calculated_rewards, _ = auto_verify(task, solutions, [estimated_label] * len(solutions), extra_info=extra_info, extended_info=extended_info)
+    majority_rewards = [i["accuracy"] for i in calculated_rewards]
+    rewards = [sum([v for k,v in i.items()]) for i in calculated_rewards]
+    
     true_rewards, _ = auto_verify(task, solutions, [ground_truth] * len(solutions), extra_info=extra_info)
+    true_rewards = [i["accuracy"] for i in true_rewards]
 
     reward_avg = sum(rewards) / len(rewards)
     majority_reward_avg = sum(majority_rewards) / len(majority_rewards)
@@ -103,7 +106,9 @@ def post_test_time_train_metrics(
     
     # true_label_ratio = counter.get(ground_truth, 0) / len(solutions)
 
+    # true_rewards, _ = auto_verify(task, solutions, [ground_truth] * len(solutions), extra_info=extra_info)
     true_rewards, _ = auto_verify(task, solutions, [ground_truth] * len(solutions), extra_info=extra_info)
+    true_rewards = [i["accuracy"] for i in true_rewards]
 
     # Compare pred_rewards with true_rewards to calculate reward hit rate
     rewards_hit_rate = sum(

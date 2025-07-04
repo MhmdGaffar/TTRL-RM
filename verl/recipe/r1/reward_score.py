@@ -40,4 +40,6 @@ def avg_reward_func(data_source, solution_str_list, ground_truth, extra_info=Non
         from verl.utils.reward_score.ttrl.auto_verify import auto_verify
         n_prompts = len(solution_str_list) // len(ground_truth)
         ground_truth_list = [ground_truth] * n_prompts
-        return  np.mean(auto_verify("math", 1, solution_str_list, ground_truth_list))
+        rewards, verify_extra_info = auto_verify("math", 1, solution_str_list, ground_truth_list)
+        results = [i["accuracy"] for i in rewards]
+        return  np.mean((results, verify_extra_info))

@@ -156,21 +156,31 @@ def simplerl_reward_fn(generated_text, golden_answer):
     return accuracy
 
 def qwen_reward_fn(generated_text, golden_answer, extended_info=None, task="math"):
+    results = {}
     model_answer = extract_answer(generated_text, task)
     accuracy = 1.0 if grade_answer(model_answer, golden_answer) else 0.0 #-0.5
+    results["accuracy"] = accuracy
 
     if extended_info is not None:
         if "boxed" not in generated_text:
-            accuracy -= 1
+            results["boxed"] = -1.0
+            # accuracy -= 1
+        else:
+            results["boxed"] = 0
 
-        # if "```python" in generated_text:
-        #     accuracy -= 0.5
+        if "```python" in generated_text:
+            accuracy -= 0.5
+            results["python"] = -0.5
+        else:
+            results["python"] = 0
 
         if "prompt_length" in extended_info and "response_length" in extended_info:
             response_prompt_length_ratio = ((extended_info["response_length"] / extended_info["prompt_length"]) - 5) / 5
             response_prompt_length_ratio = max(0, response_prompt_length_ratio)
-            accuracy -= response_prompt_length_ratio
+            # accuracy -= response_prompt_length_ratio
+            results["response_prompt_length_ratio"] = response_prompt_length_ratio
     
     # pass the accuracy as a dictionary and sum it up later
     # that will also help with minimizing the number of calls to the grading function
-    return accuracy
+    # return accuracy
+    return results

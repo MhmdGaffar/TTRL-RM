@@ -234,6 +234,7 @@ class TTRLRewardManager:
                         raise NotImplementedError(f"Non consistent task {task} and {self._data_source_to_task(data_source)} for TTRLRewardManager")
 
             rewards, verify_extra_info = auto_verify(task, group_pred_outputs, group_labels, extra_info=group_extra_info)
+            rewards = [i["accuracy"] for i in rewards]
 
             for k, v in verify_extra_info.items():
                 if isinstance(v, list):
