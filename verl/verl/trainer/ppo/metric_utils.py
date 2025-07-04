@@ -216,6 +216,7 @@ def process_validation_metrics(
                 if isinstance(var_vals[0], str):
                     continue
                 metric = {}
+                print("VALIDATION_VALS", var_vals)
                 n_resps = len(var_vals)
                 metric[f"mean@{n_resps}"] = np.mean(var_vals)
                 metric[f"std@{n_resps}"] = np.std(var_vals)
