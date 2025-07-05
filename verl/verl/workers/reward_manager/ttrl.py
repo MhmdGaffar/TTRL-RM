@@ -161,8 +161,6 @@ class TTRLRewardManager:
                     return_majority_rewards=True
                 )
                 majority_rewards = ttrl_metrics.pop("majority_rewards", None)
-                print("REWARDS", rewards)
-                print("MAJORITY_REWARDS", majority_rewards)
 
                 for k, v in ttrl_metrics.items():
                     all_ttrl_metrics[k].append(v)
