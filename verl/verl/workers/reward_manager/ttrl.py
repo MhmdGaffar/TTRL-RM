@@ -290,8 +290,6 @@ class TTRLRewardManager:
             return reward_tensor, reward_extra_info, ttrl_info
 
     def __call__(self, data: DataProto, return_dict=False):
-
-        print(f"TTRLRewardManager called with mode {self.mode}")
         if self.mode == "train":
             reward_tensor, reward_extra_info, ttrl_info = self._compute_ttrl_reward(data)
         elif self.mode == "eval":
@@ -300,8 +298,6 @@ class TTRLRewardManager:
             raise NotImplementedError(f"Mode {self.mode} is not supported for TTRLRewardManager")
 
         if return_dict:
-            print("Returning reward tensor and extra info in dictionary format")
-            print({"reward_tensor": reward_tensor, "reward_extra_info": reward_extra_info, "ttrl_info": ttrl_info})
             return {
                     "reward_tensor": reward_tensor,
                     "reward_extra_info": reward_extra_info,

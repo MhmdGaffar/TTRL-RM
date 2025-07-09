@@ -24,7 +24,12 @@ def auto_verify(task, all_outputs, all_labels, extra_info=None, extended_info=No
     else:
         rewards = [verify_fn(output, label) for output, label in zip(all_outputs, all_labels)]
     
-    verify_extra_info["acc"] = rewards
+
+    if isinstance(rewards[0], dict):
+        verify_extra_info["acc"] = [reward.get("accuracy") for reward in rewards]
+    else:
+        verify_extra_info["acc"] = rewards
+
 
     verify_extra_info["pred"] = auto_extract(task, all_outputs, extra_info=extra_info)
         
