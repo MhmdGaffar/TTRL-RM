@@ -163,16 +163,16 @@ def qwen_reward_fn(generated_text, golden_answer, extended_info=None, task="math
 
     if extended_info is not None:
         if "boxed" not in generated_text:
-            results["boxed"] = -0.5
+            results["boxed"] = -1
             # accuracy -= 1
         else:
             results["boxed"] = 0
 
-        if "```python" in generated_text:
-            accuracy -= 0.5
-            results["python"] = -0.5
-        else:
-            results["python"] = 0
+        # if "```python" in generated_text:
+        #     accuracy -= 0.5
+        #     results["python"] = -0.5
+        # else:
+        #     results["python"] = 0
 
         if "prompt_length" in extended_info and "response_length" in extended_info:
             response_prompt_length_ratio = ((extended_info["response_length"] / extended_info["prompt_length"]) - 5) / 5
