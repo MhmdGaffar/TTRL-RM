@@ -6,7 +6,34 @@ from verl.utils.reward_score.ttrl.qwen.grader import \
     math_equal as qwen_math_equal
 from verl.utils.reward_score.ttrl.qwen.math_grade import grade_answer
 from verl.utils.reward_score.ttrl.qwen.qwen_math_parser import extract_answer
+import zlib
 
+def get_compression_ratio(text, encoding='utf-8', level=6):
+    """
+    Computes the compression ratio (original_size / compressed_size) for a given text.
+    
+    Args:
+        text (str): Input text to compress.
+        encoding (str): Text encoding (default: 'utf-8').
+        level (int): zlib compression level (0-9, default=6).
+    
+    Returns:
+        float: Compression ratio. Returns 0.0 for empty input.
+    """
+    # Encode text to bytes and get original size
+    original_bytes = text.encode(encoding)
+    original_size = len(original_bytes)
+    
+    # Handle empty input
+    if original_size == 0:
+        return 0.0
+    
+    # Compress data and get compressed size
+    compressed_bytes = zlib.compress(original_bytes, level=level)
+    compressed_size = len(compressed_bytes)
+    
+    # Compute compression ratio
+    return original_size / compressed_size
 
 def qwen_reward_fn(generated_text, golden_answer, task="math"):
     model_answer = extract_answer(generated_text, task)
@@ -173,6 +200,8 @@ def qwen_reward_fn(generated_text, golden_answer, extended_info=None, task="math
         #     results["python"] = -0.5
         # else:
         #     results["python"] = 0
+
+        results["compression_ratio"] = 4 - get_compression_ratio(generated_text)
 
         if "prompt_length" in extended_info and "response_length" in extended_info:
             response_prompt_length_ratio = ((extended_info["response_length"] / extended_info["prompt_length"]) - 5) / 5
