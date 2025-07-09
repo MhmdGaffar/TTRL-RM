@@ -176,7 +176,7 @@ def qwen_reward_fn(generated_text, golden_answer, extended_info=None, task="math
 
         if "prompt_length" in extended_info and "response_length" in extended_info:
             response_prompt_length_ratio = ((extended_info["response_length"] / extended_info["prompt_length"]) - 5) / 5
-            response_prompt_length_ratio = max(0, response_prompt_length_ratio)
+            response_prompt_length_ratio = -max(0, response_prompt_length_ratio)
             # accuracy -= response_prompt_length_ratio
             results["response_prompt_length_ratio"] = response_prompt_length_ratio
     
