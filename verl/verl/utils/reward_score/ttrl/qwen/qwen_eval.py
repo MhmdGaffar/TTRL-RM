@@ -163,7 +163,7 @@ def qwen_reward_fn(generated_text, golden_answer, extended_info=None, task="math
 
     if extended_info is not None:
         if "boxed" not in generated_text:
-            results["boxed"] = -1.0
+            results["boxed"] = -0.5
             # accuracy -= 1
         else:
             results["boxed"] = 0
