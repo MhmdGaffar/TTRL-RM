@@ -624,9 +624,9 @@ class RayPPOTrainer:
             test_batch = test_batch.union(test_output_gen_batch)
 
             # evaluate using reward_function
-            print("Validation reward function start", self.val_reward_fn.__name__)
+            print("Validation reward function start", type(self.val_reward_fn))
             result = self.val_reward_fn(test_batch, return_dict=True)
-            print("Validation reward function end", self.val_reward_fn.__name__)
+            print("Validation reward function end", type(self.val_reward_fn))
             reward_tensor = result["reward_tensor"]
             scores = reward_tensor.sum(-1).cpu().tolist()
             sample_scores.extend(scores)
