@@ -201,7 +201,7 @@ def qwen_reward_fn(generated_text, golden_answer, extended_info=None, task="math
         # else:
         #     results["python"] = 0
 
-        results["compression_ratio"] = (3.5 - get_compression_ratio(generated_text))/3.5 # least on AIME was 1
+        results["compression_ratio"] = (3.5 - get_compression_ratio(generated_text))/7 # least on AIME was 1
 
         if "prompt_length" in extended_info and "response_length" in extended_info:
             response_prompt_length_ratio = ((extended_info["response_length"] / extended_info["prompt_length"]) - 5) / 5
