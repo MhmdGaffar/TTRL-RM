@@ -9,7 +9,7 @@ DATE=$(date +%m%d)
 TIME_TAG=$(date +%H%M%S)
 
 TASK="AIME-TTT"
-BACKBONE="Llama-3.1-8B-Instruct"
+BACKBONE="Llama-3.2-1B-Instruct"
 ADVANTAGE="grpo"
 
 K=3
