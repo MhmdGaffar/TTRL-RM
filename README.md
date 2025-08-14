@@ -20,21 +20,27 @@
   </p>
 </div>
 
-> Welcome to the Era of Experience.  --David Silver, Richard S. Sutton
-
-# 🎉News
-
-- **[2025-05-23]** We update both the paper and the code, with the implementation based on the [verl](https://github.com/volcengine/verl).
-
-- **[2025-04-24]** We release the code and experimental logs. Check it out: [Getting Started](#getting-started).
-
-- **[2025-04-23]** We present **TTRL** (Test-Time Reinforcement Learning), an open-source solution for online RL on data without ground-truth labels, especially test data.
 
 # 📖Introduction
 
-**We investigate Reinforcement Learning (RL) on data without explicit labels for reasoning tasks in Large Language Models (LLMs).**
-The core challenge of the problem is reward estimation during inference while not having access to ground-truth information. While this setting appears elusive, we find that common practices in Test-Time Scaling (TTS), such as majority voting, yield surprisingly effective rewards suitable for driving RL training.
+Recent developments in the field of LLMs and the emergence of reasoning capabilities from foundational
+models has sparked a wave of specialized models for reasoning and math tasks employing novel and
+sophisticated prompting, training and finetuning techniques, these models are often referred to as Large
+Reasoning Models LRMs. Some of the most prominent models tailored for such tasks are Open AI’s
+o-series models, Llama Nemotron, Deepseek R1, and Qwen-Math model series. At the center of these
+models’ development are ideas such as Chain of Thought (CoT) and Tree of Thought (ToT) prompting as
+well as RLHF post-training. This work investigates the potential of simple reward modeling using rulebased techniques to enhance finetuning without using labeled examples. Our work builds on a recent
+method called ”Test Time Reinforcement Learning (TTRL)”, that performs finetuning on LLMs using RL
+with unlabeled data. TTRL takes a finite set of samples from the model during inference and uses majority
+voting to construct binary rewards that are fed to the RL pipeline for finetuning. Our work develops an
+additional intermediate step that adds or subtracts additional reward signals based on a set of rules such
+as prompt-to-response length ratio, compression ratio, and the presence of code and other patterns in
+the response. Two of our methods show significant improvement in reward and reward accuracy over
+two math tasks, AIME 2024 and AMC.
 
+# Methodology
+In this work we aim to utilize Test-Time Reinforcement Learning along with simple rule based reward models to enhance LLMs performance during inference. 
+The figure below shows the main pipeline for Test Time Reinforcement Learning [8]. It mainly involves querying the model with query q and then sampling top M prediction sequences from the model and utilizing a simple majority voting function to get model answer y. The model answer is then used for reward calculation. A batch of M rewards are calculated and then fed to a policy optimization loop to finetune model parameters.
 <p align="center">
    <img src="figs/teaser.png" alt="Performance and settings of TTRL." style="width: 95%;">
 </p>
@@ -47,10 +53,7 @@ The core challenge of the problem is reward estimation during inference while no
 
 # 📊Main Results
 
-Our experiments demonstrate that TTRL consistently improves performance across a variety of tasks and models. Notably, TTRL boosts the `pass@1` performance of Qwen-2.5-Math-7B by approximately 211% on `AIME 2024` with only unlabeled test data.
-
-Furthermore, although TTRL is only supervised by the `maj@n` metric, TTRL has demonstrated performance to consistently surpass this upper limit of the initial model, and approach the performance of models trained directly on test data with ground-truth labels.
-
+Three experiments were carried out to verify the efficacy of the methods mentioned in the past section. One experiment tested a combination of the response-prompt length ratio and the format alignment. The second experiment tested a combination of response-prompt length ratio and code presence. The third experiment tested a combination of all the methods presented in the last section. The second and third experiments led to model collapse, therefore we only consider the results of the first experiment which are detailed in figure 2
 <p align="center">
    <img src="figs/results.png" alt="Main results of TTRL." style="width: 60%;">
 </p>
