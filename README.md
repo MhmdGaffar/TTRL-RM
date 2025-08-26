@@ -51,25 +51,25 @@ The four reward models tested are:
 Three experiments were carried out to verify the efficacy of the methods mentioned in the past section. One experiment tested a combination of the response-prompt length ratio and the format alignment. The second experiment tested a combination of response-prompt length ratio and code presence. The third experiment tested a combination of all the methods presented in the last section. The second and third experiments led to model collapse, therefore we only consider the results of the first experiment which are detailed in these figures: 
 <div class="figure-row">
   <div class="figure-container">
-    <img src="figure1.jpg" alt="Description of Figure 1">
+    <img src="figs/AIME_post_train_accuracy.png" alt="AIME post-training accuracy">
   </div>
   <div class="figure-container">
-    <img src="figure2.jpg" alt="Description of Figure 2">
+    <img src="figs/AIME_val_accuracy.png" alt="AIME validation accuracy">
   </div>
   <div class="figure-container">
-    <img src="figure3.jpg" alt="Description of Figure 3">
+    <img src="figs/AIME_mean_response_length.png" alt="AIME mean response length">
   </div>
 </div>
 
 <div class="figure-row">
   <div class="figure-container">
-    <img src="figure4.jpg" alt="Description of Figure 4">
+    <img src="figs/AMC_post_train_accuracy.png" alt="AMC post-training accuracy">
   </div>
   <div class="figure-container">
-    <img src="figure5.jpg" alt="Description of Figure 5">
+    <img src="figs/AMC_val_accuracy.png" alt="AMC validation accuracy">
   </div>
   <div class="figure-container">
-    <img src="figure6.jpg" alt="Description of Figure 6">
+    <img src="figs/AMC_mean_response_length.png" alt="AMC mean response length">
   </div>
 </div>
 
