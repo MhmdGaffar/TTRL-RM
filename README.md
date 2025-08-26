@@ -73,10 +73,6 @@ Three experiments were carried out to verify the efficacy of the methods mention
   </div>
 </div>
 
-<p align="center">
-   <img src="figs/results.png" alt="Main results of TTRL." style="width: 60%;">
-</p>
-
 *All experiments were conducted on 8 * NVIDIA A100 40GB GPUs.*
 
 
